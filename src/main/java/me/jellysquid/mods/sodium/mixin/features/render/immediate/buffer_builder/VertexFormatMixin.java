@@ -21,11 +21,11 @@ public class VertexFormatMixin implements ExtendedVertexFormat {
     @Final
     private ImmutableList<VertexFormatElement> elements;
 
-    private ExtendedVertexFormat.Element[] embeddium$extendedElements;
+    private ExtendedVertexFormat.Element[] xenon$extendedElements;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void embeddium$createElementArray(ImmutableMap<String, VertexFormatElement> immutableList, CallbackInfo ci) {
-        this.embeddium$extendedElements = new ExtendedVertexFormat.Element[this.elements.size()];
+    private void xenon$createElementArray(ImmutableMap<String, VertexFormatElement> immutableList, CallbackInfo ci) {
+        this.xenon$extendedElements = new ExtendedVertexFormat.Element[this.elements.size()];
 
         if (this.elements.size() == 0)
             return; // prevent crash with mods that create empty VertexFormats
@@ -39,18 +39,18 @@ public class VertexFormatMixin implements ExtendedVertexFormat {
             int byteLength = 0;
 
             do {
-                if (++id >= this.embeddium$extendedElements.length)
-                    id -= this.embeddium$extendedElements.length;
+                if (++id >= this.xenon$extendedElements.length)
+                    id -= this.xenon$extendedElements.length;
                 byteLength += currentElement.getByteSize();
                 currentElement = this.elements.get(id);
             } while (currentElement.getUsage() == VertexFormatElement.Usage.PADDING);
 
-            this.embeddium$extendedElements[oldId] = new ExtendedVertexFormat.Element(element, id - oldId, byteLength);
+            this.xenon$extendedElements[oldId] = new ExtendedVertexFormat.Element(element, id - oldId, byteLength);
         }
     }
 
     @Override
-    public ExtendedVertexFormat.Element[] embeddium$getExtendedElements() {
-        return this.embeddium$extendedElements;
+    public ExtendedVertexFormat.Element[] xenon$getExtendedElements() {
+        return this.xenon$extendedElements;
     }
 }

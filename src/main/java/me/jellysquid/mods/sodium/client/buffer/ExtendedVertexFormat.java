@@ -3,7 +3,7 @@ package me.jellysquid.mods.sodium.client.buffer;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 
 public interface ExtendedVertexFormat {
-    Element[] embeddium$getExtendedElements();
+    Element[] xenon$getExtendedElements();
 
     class Element {
         public final VertexFormatElement actual;

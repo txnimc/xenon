@@ -69,6 +69,6 @@ public record HashedFingerprint(
 
     private static Path getFilePath() {
         return FMLPaths.CONFIGDIR.get()
-                .resolve("embeddium-fingerprint.json");
+                .resolve("xenon-fingerprint.json");
     }
 }

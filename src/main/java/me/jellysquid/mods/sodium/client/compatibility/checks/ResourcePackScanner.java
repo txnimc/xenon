@@ -172,7 +172,7 @@ public class ResourcePackScanner {
     }
 
     private static boolean isExternalResourcePack(PackResources pack) {
-        // Embeddium: PathPackResources is used by NeoForge 20.4+, so we will false-detect mods
+        // Xenon: PathPackResources is used by NeoForge 20.4+, so we will false-detect mods
         // if we check it like upstream. TODO: Investigate a way of detecting PathPackResources instances that
         // aren't from mods
         return pack instanceof FilePackResources;

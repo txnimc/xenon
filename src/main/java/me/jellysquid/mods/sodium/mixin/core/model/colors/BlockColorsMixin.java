@@ -48,7 +48,7 @@ public class BlockColorsMixin implements BlockColorsExtended {
     }
 
     @Override
-    public ReferenceSet<Block> embeddium$getOverridenVanillaBlocks() {
+    public ReferenceSet<Block> xenon$getOverridenVanillaBlocks() {
         return ReferenceSets.unmodifiable(this.overridenBlocks);
     }
 }

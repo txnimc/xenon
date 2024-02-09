@@ -1,6 +1,7 @@
 package me.jellysquid.mods.sodium.client.gui.widgets;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui.FlatButtonWidgetExtended;
 import me.jellysquid.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class FlatButtonWidget extends AbstractWidget implements Renderable {
+public class FlatButtonWidget extends AbstractWidget implements Renderable, FlatButtonWidgetExtended {
     private final Dim2i dim;
     private final Runnable action;
 
@@ -23,7 +24,7 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
     private boolean selected;
     private boolean enabled = true;
     private boolean visible = true;
-
+    private boolean leftAligned;
     private Component label;
 
     public FlatButtonWidget(Dim2i dim, Component label, Runnable action) {
@@ -46,10 +47,21 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
         int strWidth = this.font.width(this.label);
 
         this.drawRect(drawContext, this.dim.x(), this.dim.y(), this.dim.getLimitX(), this.dim.getLimitY(), backgroundColor);
-        this.drawString(drawContext, this.label, this.dim.getCenterX() - (strWidth / 2), this.dim.getCenterY() - 4, textColor);
+
+        if (this.leftAligned) {
+            this.drawString(drawContext, this.label, this.dim.x() + 10, this.dim.getCenterY() - 4, textColor);
+        } else {
+            this.drawString(drawContext, this.label, this.dim.getCenterX() - (strWidth / 2), this.dim.getCenterY() - 4, textColor);
+        }
 
         if (this.enabled && this.selected) {
             this.drawRect(drawContext, this.dim.x(), this.dim.getLimitY() - 1, this.dim.getLimitX(), this.dim.getLimitY(), 0xFF94E4D3);
+
+            if (this.leftAligned) {
+                this.drawRect(drawContext, this.dim.x(), this.dim.y() - 1, this.dim.x() + 1, this.dim.getLimitY(), 0xFF94E4D3);
+            } else {
+                this.drawRect(drawContext, this.dim.x(), this.dim.getLimitY() - 1, this.dim.getLimitX(), this.dim.getLimitY(), 0xFF94E4D3);
+            }
         }
         if (this.enabled && this.isFocused()) {
             this.drawBorder(drawContext, this.dim.x(), this.dim.y(), this.dim.getLimitX(), this.dim.getLimitY(), -1);
@@ -127,6 +139,21 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
         return new ScreenRectangle(this.dim.x(), this.dim.y(), this.dim.width(), this.dim.height());
     }
 
+    @Override
+    public Dim2i getDimensions() {
+        return this.dim;
+    }
+
+    @Override
+    public boolean isLeftAligned() {
+        return this.leftAligned;
+    }
+
+    @Override
+    public void setLeftAligned(boolean leftAligned) {
+        this.leftAligned = leftAligned;
+    }
+
     public static class Style {
         public int bgHovered, bgDefault, bgDisabled;
         public int textDefault, textDisabled;
@@ -142,4 +169,5 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
             return style;
         }
     }
+
 }

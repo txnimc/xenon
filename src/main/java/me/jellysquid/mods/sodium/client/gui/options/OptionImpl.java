@@ -4,6 +4,8 @@ import me.jellysquid.mods.sodium.client.gui.options.binding.GenericBinding;
 import me.jellysquid.mods.sodium.client.gui.options.binding.OptionBinding;
 import me.jellysquid.mods.sodium.client.gui.options.control.Control;
 import me.jellysquid.mods.sodium.client.gui.options.storage.OptionStorage;
+import me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui.OptionExtended;
+import me.jellysquid.mods.sodium.client.util.Dim2i;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.Validate;
 
@@ -13,7 +15,7 @@ import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class OptionImpl<S, T> implements Option<T> {
+public class OptionImpl<S, T> implements Option<T>, OptionExtended {
     private final OptionStorage<S> storage;
 
     private final OptionBinding<S, T> binding;
@@ -28,6 +30,11 @@ public class OptionImpl<S, T> implements Option<T> {
 
     private T value;
     private T modifiedValue;
+
+    private Dim2i parent;
+    private Dim2i dim2i;
+    private boolean highlight;
+    private boolean selected;
 
     private final boolean enabled;
 
@@ -111,6 +118,46 @@ public class OptionImpl<S, T> implements Option<T> {
     @Override
     public Collection<OptionFlag> getFlags() {
         return this.flags;
+    }
+
+    @Override
+    public boolean isHighlight() {
+        return this.highlight;
+    }
+
+    @Override
+    public void setHighlight(boolean highlight) {
+        this.highlight = highlight;
+    }
+
+    @Override
+    public Dim2i getDim2i() {
+        return this.dim2i;
+    }
+
+    @Override
+    public void setDim2i(Dim2i dim2i) {
+        this.dim2i = dim2i;
+    }
+
+    @Override
+    public Dim2i getParentDimension() {
+        return this.parent;
+    }
+
+    @Override
+    public void setParentDimension(Dim2i parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public boolean getSelected() {
+        return this.selected;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public static <S, T> OptionImpl.Builder<S, T> createBuilder(@SuppressWarnings("unused") Class<T> type, OptionStorage<S> storage) {

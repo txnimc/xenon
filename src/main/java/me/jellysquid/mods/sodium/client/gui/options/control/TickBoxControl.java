@@ -29,7 +29,7 @@ public class TickBoxControl implements Control<Boolean> {
         return this.option;
     }
 
-    private static class TickBoxControlElement extends ControlElement<Boolean> {
+    public static class TickBoxControlElement extends ControlElement<Boolean> {
         private final Rect2i button;
 
         public TickBoxControlElement(Option<Boolean> option, Dim2i dim) {
@@ -42,8 +42,8 @@ public class TickBoxControl implements Control<Boolean> {
         public void render(GuiGraphics drawContext, int mouseX, int mouseY, float delta) {
             super.render(drawContext, mouseX, mouseY, delta);
 
-            final int x = this.button.getX();
-            final int y = this.button.getY();
+            final int x = this.dim.getLimitX() - 16;
+            final int y = this.dim.getCenterY() - 5;
             final int w = x + this.button.getWidth();
             final int h = y + this.button.getHeight();
 

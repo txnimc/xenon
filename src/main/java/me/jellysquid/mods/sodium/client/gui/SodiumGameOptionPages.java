@@ -24,6 +24,7 @@ import net.minecraft.client.ParticleStatus;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
+import toni.xenon.extras.ExtrasOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,24 +73,7 @@ public class SodiumGameOptionPages {
                             client.resizeDisplay();
                         }, opts -> opts.guiScale().get())
                         .build())
-                .add(OptionImpl.createBuilder(boolean.class, vanillaOpts)
-                        .setName(Component.translatable("options.fullscreen"))
-                        .setTooltip(Component.translatable("sodium.options.fullscreen.tooltip"))
-                        .setControl(TickBoxControl::new)
-                        .setBinding((opts, value) -> {
-                            opts.fullscreen().set(value);
-
-                            Minecraft client = Minecraft.getInstance();
-                            Window window = client.getWindow();
-
-                            if (window != null && window.isFullscreen() != opts.fullscreen().get()) {
-                                window.toggleFullScreen();
-
-                                // The client might not be able to enter full-screen mode
-                                opts.fullscreen().set(window.isFullscreen());
-                            }
-                        }, (opts) -> opts.fullscreen().get())
-                        .build())
+                .add(ExtrasOptions.getFullscreenOption(vanillaOpts))
                 .add(OptionImpl.createBuilder(boolean.class, vanillaOpts)
                         .setName(Component.translatable("options.vsync"))
                         .setTooltip(Component.translatable("sodium.options.v_sync.tooltip"))
@@ -107,6 +91,8 @@ public class SodiumGameOptionPages {
                         }, opts -> opts.framerateLimit().get())
                         .build())
                 .build());
+
+        ExtrasOptions.setFPSOptions(groups, sodiumOpts);
 
         groups.add(OptionGroup.createBuilder()
                 .add(OptionImpl.createBuilder(boolean.class, vanillaOpts)
@@ -129,6 +115,7 @@ public class SodiumGameOptionPages {
                         .build())
                 .build());
 
+        ExtrasOptions.setPerformanceOptions(groups, sodiumOpts);
         return new OptionPage(Component.translatable("stat.generalButton"), ImmutableList.copyOf(groups));
     }
 

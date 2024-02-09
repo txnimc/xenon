@@ -9,7 +9,7 @@ import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.gui.options.TextProvider;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.network.chat.Component;
-import org.embeddedt.embeddium.config.ConfigMigrator;
+import toni.xenon.config.ConfigMigrator;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -127,7 +127,7 @@ public class SodiumGameOptions {
 
         config.configPath = path;
 
-        // TODO Embeddium: Remove the field completely in 0.4
+        // TODO Xenon: Remove the field completely in 0.4
         config.notifications.forceDisableDonationPrompts = false;
 
         try {

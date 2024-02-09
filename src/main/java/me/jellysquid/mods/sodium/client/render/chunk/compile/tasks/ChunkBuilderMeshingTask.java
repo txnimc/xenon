@@ -34,9 +34,9 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.common.MinecraftForge;
-import org.embeddedt.embeddium.api.ChunkDataBuiltEvent;
-import org.embeddedt.embeddium.chunk.MeshAppenderRenderer;
-import org.embeddedt.embeddium.model.ModelDataSnapshotter;
+import toni.xenon.api.ChunkDataBuiltEvent;
+import toni.xenon.chunk.MeshAppenderRenderer;
+import toni.xenon.model.ModelDataSnapshotter;
 
 import java.util.Map;
 

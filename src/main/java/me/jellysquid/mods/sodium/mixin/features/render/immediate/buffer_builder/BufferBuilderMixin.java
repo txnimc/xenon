@@ -25,8 +25,8 @@ public abstract class BufferBuilderMixin extends DefaultedVertexConsumer impleme
     @Shadow
     private int elementIndex;
 
-    private ExtendedVertexFormat.Element[] embeddium$vertexFormatExtendedElements;
-    private ExtendedVertexFormat.Element embeddium$currentExtendedElement;
+    private ExtendedVertexFormat.Element[] xenon$vertexFormatExtendedElements;
+    private ExtendedVertexFormat.Element xenon$currentExtendedElement;
 
     @Inject(method = "switchFormat",
             at = @At(
@@ -36,8 +36,8 @@ public abstract class BufferBuilderMixin extends DefaultedVertexConsumer impleme
             )
     )
     private void onFormatChanged(VertexFormat format, CallbackInfo ci) {
-        embeddium$vertexFormatExtendedElements = ((ExtendedVertexFormat) format).embeddium$getExtendedElements();
-        embeddium$currentExtendedElement = embeddium$vertexFormatExtendedElements[0];
+        xenon$vertexFormatExtendedElements = ((ExtendedVertexFormat) format).xenon$getExtendedElements();
+        xenon$currentExtendedElement = xenon$vertexFormatExtendedElements[0];
     }
 
     /**
@@ -47,11 +47,11 @@ public abstract class BufferBuilderMixin extends DefaultedVertexConsumer impleme
     @Override
     @Overwrite
     public void nextElement() {
-        if ((elementIndex += embeddium$currentExtendedElement.increment) >= embeddium$vertexFormatExtendedElements.length)
-            elementIndex -= embeddium$vertexFormatExtendedElements.length;
-        nextElementByte += embeddium$currentExtendedElement.byteLength;
-        embeddium$currentExtendedElement = embeddium$vertexFormatExtendedElements[elementIndex];
-        currentElement = embeddium$currentExtendedElement.actual;
+        if ((elementIndex += xenon$currentExtendedElement.increment) >= xenon$vertexFormatExtendedElements.length)
+            elementIndex -= xenon$vertexFormatExtendedElements.length;
+        nextElementByte += xenon$currentExtendedElement.byteLength;
+        xenon$currentExtendedElement = xenon$vertexFormatExtendedElements[elementIndex];
+        currentElement = xenon$currentExtendedElement.actual;
 
         if (this.defaultColorSet && this.currentElement.getUsage() == VertexFormatElement.Usage.COLOR) {
             BufferVertexConsumer.super.color(this.defaultR, this.defaultG, this.defaultB, this.defaultA);

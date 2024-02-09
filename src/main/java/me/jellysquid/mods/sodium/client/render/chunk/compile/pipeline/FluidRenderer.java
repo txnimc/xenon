@@ -17,17 +17,13 @@ import me.jellysquid.mods.sodium.client.render.chunk.compile.ChunkBuildBuffers;
 import me.jellysquid.mods.sodium.client.render.chunk.compile.buffers.ChunkModelBuilder;
 import me.jellysquid.mods.sodium.client.render.chunk.terrain.material.DefaultMaterials;
 import me.jellysquid.mods.sodium.client.render.chunk.terrain.material.Material;
-import me.jellysquid.mods.sodium.client.render.chunk.vertex.builder.ChunkMeshBufferBuilder;
 import me.jellysquid.mods.sodium.client.render.chunk.vertex.format.ChunkVertexEncoder;
-import me.jellysquid.mods.sodium.client.render.chunk.vertex.format.ChunkVertexEncoder.Vertex;
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
 import me.jellysquid.mods.sodium.client.util.DirectionUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
-import net.caffeinemc.mods.sodium.api.util.NormI8;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -41,8 +37,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.embeddedt.embeddium.render.fluid.EmbeddiumFluidSpriteCache;
-import org.embeddedt.embeddium.tags.EmbeddiumTags;
+import toni.xenon.render.fluid.XenonFluidSpriteCache;
+import toni.xenon.tags.XenonTags;
 
 public class FluidRenderer {
     // TODO: allow this to be changed by vertex format
@@ -63,7 +59,7 @@ public class FluidRenderer {
     private final ChunkVertexEncoder.Vertex[] vertices = ChunkVertexEncoder.Vertex.uninitializedQuad();
     private final ColorProviderRegistry colorProviderRegistry;
 
-    private final EmbeddiumFluidSpriteCache fluidSpriteCache = new EmbeddiumFluidSpriteCache();
+    private final XenonFluidSpriteCache fluidSpriteCache = new XenonFluidSpriteCache();
 
     private final SinkingVertexBuilder fluidVertexBuilder = new SinkingVertexBuilder();
 ;
@@ -127,8 +123,8 @@ public class FluidRenderer {
         var material = DefaultMaterials.forFluidState(fluidState);
         var meshBuilder = buffers.get(material);
 
-        // Embeddium: Delegate to vanilla liquid renderer if fluid has this tag.
-        if(fluidState.getType().is(EmbeddiumTags.RENDERS_WITH_VANILLA)) {
+        // Xenon: Delegate to vanilla liquid renderer if fluid has this tag.
+        if(fluidState.getType().is(XenonTags.RENDERS_WITH_VANILLA)) {
             renderVanilla(world, fluidState, blockPos, meshBuilder, material);
             return;
         }

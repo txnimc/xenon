@@ -11,7 +11,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkConstants;
 
-import org.embeddedt.embeddium.taint.incompats.IncompatibleModManager;
+import toni.xenon.taint.incompats.IncompatibleModManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +20,8 @@ import java.io.IOException;
 @Mod(SodiumClientMod.MODID)
 public class SodiumClientMod {
 
-    public static final String MODID = "embeddium";
-    public static final String MODNAME = "Embeddium";
+    public static final String MODID = "xenon";
+    public static final String MODNAME = "Xenon";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MODNAME);
     private static SodiumGameOptions CONFIG = loadConfig();

@@ -216,7 +216,7 @@ public abstract class WorldRendererMixin implements WorldRendererExtended {
      * Target the flag that selects whether or not to enable the entity outline shader, and enable it if
      * we rendered a block entity that requested it.
      *
-     * NOTE: When updating Embeddium to newer versions of the game, this injection point must be checked.
+     * NOTE: When updating Xenon to newer versions of the game, this injection point must be checked.
      */
     @ModifyVariable(method = "renderLevel", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/LevelRenderer;globalBlockEntities:Ljava/util/Set;", shift = At.Shift.BEFORE, ordinal = 0), ordinal = 3)
     private boolean changeEntityOutlineFlag(boolean bl) {

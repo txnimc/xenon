@@ -6,7 +6,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.moddiscovery.ModFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.embeddedt.embeddium.config.ConfigMigrator;
+import toni.xenon.config.ConfigMigrator;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -32,7 +32,7 @@ public class SodiumMixinPlugin implements IMixinConfigPlugin {
     @Override
     public void onLoad(String mixinPackage) {
         try {
-            this.config = MixinConfig.load(ConfigMigrator.handleConfigMigration("embeddium-mixins.properties").toFile());
+            this.config = MixinConfig.load(ConfigMigrator.handleConfigMigration("xenon-mixins.properties").toFile());
         } catch (Exception e) {
             throw new RuntimeException("Could not load configuration file for " + MODNAME, e);
         }
@@ -101,7 +101,7 @@ public class SodiumMixinPlugin implements IMixinConfigPlugin {
             return null;
         }
 
-        ModFile modFile = FMLLoader.getLoadingModList().getModFileById("embeddium").getFile();
+        ModFile modFile = FMLLoader.getLoadingModList().getModFileById("xenon").getFile();
         Set<Path> rootPaths = new HashSet<>();
         // This allows us to see it from multiple sourcesets if need be
         for(String basePackage : new String[] { "core", "modcompat" }) {

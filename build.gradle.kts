@@ -98,7 +98,7 @@ minecraft {
             property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
 
             mods {
-                create("embeddium") {
+                create("xenon") {
                     sources(sourceSets["main"])
                     sources(sourceSets["compat"])
                     sources(sourceSets["api"])
@@ -131,8 +131,8 @@ repositories {
 
 mixin {
     // MixinGradle Settings
-    add(sourceSets["main"], "embeddium-refmap.json")
-    config("embeddium.mixins.json")
+    add(sourceSets["main"], "xenon-refmap.json")
+    config("xenon.mixins.json")
 }
 
 fun DependencyHandlerScope.compatCompileOnly(dependency: Dependency) {
@@ -216,7 +216,7 @@ publishing {
 
 publishMods {
     file = tasks.jar.get().archiveFile
-    changelog = "https://github.com/embeddedt/embeddium/wiki/Changelog"
+    changelog = ""
     type = STABLE
     modLoaders.add("forge")
     modLoaders.add("neoforge")
@@ -240,7 +240,7 @@ publishMods {
         }
     }
 
-    displayName = "[${"minecraft_version"()}] Embeddium ${"mod_version"()}"
+    displayName = "[${"minecraft_version"()}] Xenon ${"mod_version"()}"
 }
 
 fun getVersionMetadata(): String {

@@ -66,7 +66,7 @@ public class CyclingControl<T extends Enum<T>> implements Control<T> {
         return 70;
     }
 
-    private static class CyclingControlElement<T extends Enum<T>> extends ControlElement<T> {
+    public static class CyclingControlElement<T extends Enum<T>> extends ControlElement<T> {
         private final T[] allowedValues;
         private final Component[] names;
         private int currentIndex;
@@ -99,8 +99,9 @@ public class CyclingControl<T extends Enum<T>> implements Control<T> {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            if (this.option.isAvailable() && button == 0 && this.dim.containsCursor(mouseX, mouseY)) {
-                cycleControl(Screen.hasShiftDown());
+            if (this.option.isAvailable() && this.dim.containsCursor(mouseX, mouseY) && (button == 0 || button == 1)) {
+                this.currentIndex = Math.floorMod(this.option.getValue().ordinal() + (button == 0 ? 1 : -1), this.allowedValues.length);
+                this.option.setValue(this.allowedValues[this.currentIndex]);
                 this.playClickSound();
 
                 return true;

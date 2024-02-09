@@ -1,6 +1,6 @@
 package me.jellysquid.mods.sodium.client.world.cloned;
 
-import org.embeddedt.embeddium.api.MeshAppender;
+import toni.xenon.api.MeshAppender;
 
 import java.util.Collections;
 import java.util.List;

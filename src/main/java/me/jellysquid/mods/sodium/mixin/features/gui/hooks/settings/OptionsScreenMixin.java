@@ -1,6 +1,7 @@
 package me.jellysquid.mods.sodium.mixin.features.gui.hooks.settings;
 
 import me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI;
+import me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui.SodiumVideoOptionsScreen;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -17,6 +18,6 @@ public class OptionsScreenMixin extends Screen {
 
     @Inject(method = "lambda$init$2", at = @At("HEAD"), cancellable = true)
     private void open(CallbackInfoReturnable<Screen> ci) {
-        ci.setReturnValue(new SodiumOptionsGUI(this));
+        ci.setReturnValue(new SodiumVideoOptionsScreen(this));
     }
 }

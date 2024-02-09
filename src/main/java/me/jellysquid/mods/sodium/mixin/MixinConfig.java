@@ -29,7 +29,7 @@ public class MixinConfig {
         // Defines the default rules which can be configured by the user or other mods.
         // You must manually add a rule for any new mixins not covered by an existing package rule.
         this.addMixinRule("core", true); // TODO: Don't actually allow the user to disable this
-        this.addMixinRule("core.checks", false); // Embeddium: disable checks module until upstream tests it
+        this.addMixinRule("core.checks", false); // Xenon: disable checks module until upstream tests it
 
         this.addMixinRule("features", true);
 
@@ -88,6 +88,15 @@ public class MixinConfig {
         this.addMixinRule("workarounds", true);
         this.addMixinRule("workarounds.context_creation", true);
         this.addMixinRule("workarounds.event_loop", true);
+
+        this.addMixinRule("extras.cloudheight", true);
+        this.addMixinRule("extras.borderless", true);
+        this.addMixinRule("extras.darkness", true);
+        this.addMixinRule("extras.entitydistance", true);
+        this.addMixinRule("extras.fontshadow", true);
+        this.addMixinRule("extras.fps", true);
+        this.addMixinRule("extras.jei", true);
+        this.addMixinRule("extras.togglefog", true);
 
         Pattern replacePattern = Pattern.compile("[^\\w]");
 

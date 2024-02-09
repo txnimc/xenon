@@ -1,43 +1,42 @@
-<img src="src/main/resources/icon.png" width="128">
+<img src="banner.png">
 
-# Embeddium
+# Xenon
 
-[![](http://cf.way2muchnoise.eu/short_embeddium_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/embeddium)
-[![](http://cf.way2muchnoise.eu/versions/Available%20for_embeddium_full.svg)](https://www.curseforge.com/minecraft/mc-mods/embeddium/files)
+Xenon is a fork of Embeddium (Forge port of the Sodium performance mod) with improvements, extra options, and new maintainers. 
 
-Embeddium is an unofficial fork of Sodium, with additional changes and bugfixes to integrate it with the Forge modding
-ecosystem.
+Currently, it includes all the extra improvements from my Embeddium Extras mod, as well as Reese's vertical video settings (which is required for the extra options).
 
-Embeddium is **not supported by CaffeineMC**. Do not report issues encountered with it to their bug tracker or in their
-Discord. I have my own [Discord server](https://discord.gg/rN9Y7caguP) for my mods.
+This mod is intended to be a replacement for Embeddium on 1.20.1 (and older versions soon) that is not hostile 
+to upstream Sodium. 
+* This mod will stay Forge only. 
+* Contributions and improvements are welcome and accepted. 
+* When/if Sodium releases an official Forge port for newer versions, this mod will stop being updated for those versions.
+
+Xenon is **not supported by CaffeineMC, or embeddedt**. Do not report issues encountered with it to their bug tracker or in their
+Discord. You can report issues on the [Xenon GitHub](https://github.com/anthxnymc/xenon) or on my [Discord server](https://discord.gg/c6BBguCUWx).
 
 ## Compatibility
 
-Generally, Embeddium should work out of the box with many more mods than Rubidium. However, given the scope of changes
-it makes to the renderer, it may have compatibility issues with some mods that use advanced rendering. Please open an
-issue if you experience problems. Some issues may require changes to be made in the other mod but it's good to have
-them documented.
+**OptiFine is not supported**. This mod replaces OptiFine.
 
-**OptiFine is not supported** for obvious reasons.
+Xenon will work with everything Embeddium does, as it is a fork. We intend to keep compatibility
+with upstream and Embeddium / Forge Sodium addons as much as possible.
 
 ## Shaders
 
 For now, please continue to use [Oculus](https://www.curseforge.com/minecraft/mc-mods/oculus) if you want shader support.
-Note that Oculus is somewhat buggy, and your experience will probably be more stable without it. I recommend removing
-Oculus if you do not need shaders.
-
-## Mod integration
-
-If you're looking to add Embeddium to your development environment, please take a look at the [dedicated wiki page](https://github.com/embeddedt/embeddium/wiki/For-Developers).
+If you encounter issues with shaders installed, disable Oculus first, and if that fixes it, report the issue to them instead. 
 
 ## Credits
 
 * JellySquid & the CaffeineMC team, for making Sodium in the first place, without which this project would not be possible
 * Asek3, for the initial port to Forge
+* embeddedt for their work on Embeddium, from which this mod is forked
+* FlashyReese & TexTrue for the vertical video options mod, and its Forge port, respectively.
+* SrRapero720 for bug fixes and contributions to Embeddium Extras.
 * XFactHD, for providing a list of gamebreaking Rubidium issues to start this work off, and for testing early builds
 * Pepper, for their invaluable assistance with getting Forge lighting to work on Sodium 0.5
-* @CelestialAbyss and @input-Here for making the new logo design
 
 ## License
 
-Embeddium currently follows the license of upstream Sodium (LGPL-3.0).
+Xenon currently follows the license of upstream Sodium (LGPL-3.0).

@@ -1,0 +1,4 @@
+{
+  "xenon.conflicting_mod": "Xenon 检测到已安装的模组中有些可能会导致渲染问题或崩溃。建议卸载它们。请参考以下列表。",
+  "xenon.conflicting_mod_list": "[{2}]"
+}
