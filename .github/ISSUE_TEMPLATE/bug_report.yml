@@ -13,13 +13,13 @@ body:
         - **Have you ensured that all of your mods (including Xenon) are up-to-date?** The latest version of Xenon
         can always be found [on Modrinth](https://modrinth.com/mod/xenon).
         
-        - **Have you checked whether you are [using mods that Xenon does not support](https://github.com/embeddedt/xenon/wiki/Unsupported-mods)?**
+        - **Have you checked whether you are [using mods that Xenon does not support](https://github.com/anthxnymc/xenon/wiki/Unsupported-mods)?**
         Sometimes Xenon makes existing issues with these mods more obvious.
         
         - **Have you read Sodium's [list of known driver incompatibilities](https://github.com/CaffeineMC/sodium-fabric/wiki/Driver-Compatibility)?** Most problems
         (including "poor performance") are caused by out-of-date or incompatible graphics drivers.
         
-        - **Have you used the [search tool](https://github.com/embeddedt/xenon/issues) to check whether your issue
+        - **Have you used the [search tool](https://github.com/anthxnymc/xenon/issues) to check whether your issue
         has already been reported?** If it has been, then consider adding more information to the existing issue instead.
         
         - **Have you determined the minimum set of instructions to reproduce the issue?** If your problem only occurs
