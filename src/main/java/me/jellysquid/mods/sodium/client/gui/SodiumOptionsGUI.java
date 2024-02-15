@@ -75,7 +75,7 @@ public class SodiumOptionsGUI extends Screen implements ScreenPromptable {
         pages.add(new EntityCullingPage());
         pages.add(new OthersPage());
 
-        this.checkPromptTimers();
+        //this.checkPromptTimers();
     }
 
     private void checkPromptTimers() {

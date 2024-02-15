@@ -216,27 +216,39 @@ publishing {
 
 publishMods {
     file = tasks.jar.get().archiveFile
-    changelog = ""
+    changelog = "https://github.com/anthxnymc/xenon/wiki/Changelog"
     type = STABLE
     modLoaders.add("forge")
     modLoaders.add("neoforge")
 
     curseforge {
-        projectId = "908741"
-        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        projectId = "564239"
+        accessToken = providers.environmentVariable("CF_API_TOKEN")
         minecraftVersions.add("minecraft_version"())
 
         incompatible {
             slug = "rubidium"
         }
+
+        incompatible {
+            slug = "embeddium"
+        }
+
+        incompatible {
+            slug = "magnesium-extras"
+        }
     }
     modrinth {
-        projectId = "sk9rgfiA"
+        projectId = "aWDwN8NN"
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         minecraftVersions.add("minecraft_version"())
 
         incompatible {
             slug = "rubidium"
+        }
+
+        incompatible {
+            slug = "embeddium"
         }
     }
 

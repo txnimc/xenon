@@ -4,6 +4,7 @@ import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.data.fingerprint.HashedFingerprint;
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptionPages;
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptions;
+import me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI;
 import me.jellysquid.mods.sodium.client.gui.options.Option;
 import me.jellysquid.mods.sodium.client.gui.options.OptionFlag;
 import me.jellysquid.mods.sodium.client.gui.options.OptionPage;
@@ -66,15 +67,8 @@ public class SodiumVideoOptionsScreen extends Screen implements ScreenPromptable
         super(Component.literal("Reese's Sodium Menu"));
         this.prevScreen = prev;
 
-        this.pages.add(SodiumGameOptionPages.general());
-        this.pages.add(SodiumGameOptionPages.quality());
-        this.pages.add(new QualityPlusPage());
-        this.pages.add(SodiumGameOptionPages.performance());
-        this.pages.add(SodiumGameOptionPages.advanced());
-
-        pages.add(new TrueDarknessPage());
-        pages.add(new EntityCullingPage());
-        pages.add(new OthersPage());
+        var original = new SodiumOptionsGUI(this);
+        pages.addAll(original.pages);
 
         this.checkPromptTimers();
     }
