@@ -32,6 +32,6 @@ Stub, to allow mods detecting Embeddium to function as expected.
 [[dependencies.xenon]]
 modId = "oculus"
 mandatory = false
-versionRange = "[1.6.15,)"
+versionRange = "(1.6.15,)"
 ordering = "BEFORE"
 side = "CLIENT"

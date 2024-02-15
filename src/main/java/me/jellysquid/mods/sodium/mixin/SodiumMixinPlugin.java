@@ -4,6 +4,7 @@ import me.jellysquid.mods.sodium.client.SodiumPreLaunch;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.moddiscovery.ModFile;
+import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.embeddedt.embeddium.config.ConfigMigrator;
@@ -91,8 +92,12 @@ public class SodiumMixinPlugin implements IMixinConfigPlugin {
     }
 
     private static String mixinClassify(Path baseFolder, Path path) {
-        String className = baseFolder.relativize(path).toString().replace('/', '.');
-        return className.substring(0, className.length() - 6);
+        try {
+            String className = baseFolder.relativize(path).toString().replace('/', '.');
+            return className.substring(0, className.length() - 6);
+        } catch(RuntimeException e) {
+            throw new IllegalStateException("Error relativizing " + path + " to " + baseFolder, e);
+        }
     }
 
     @Override
@@ -107,24 +112,22 @@ public class SodiumMixinPlugin implements IMixinConfigPlugin {
         for(String basePackage : new String[] { "core", "modcompat" }) {
             Path mixinPackagePath = modFile.findResource("me", "jellysquid", "mods", "sodium", "mixin", basePackage);
             if(Files.exists(mixinPackagePath)) {
-                rootPaths.add(mixinPackagePath.getParent());
+                rootPaths.add(mixinPackagePath.getParent().toAbsolutePath());
             }
         }
 
         Set<String> possibleMixinClasses = new HashSet<>();
         for(Path rootPath : rootPaths) {
-            Stream<Path> mixinStream;
-            try {
-                mixinStream = Files.find(rootPath, Integer.MAX_VALUE, (path, attrs) -> attrs.isRegularFile() && path.getFileName().toString().endsWith(".class"));
+            try(Stream<Path> mixinStream = Files.find(rootPath, Integer.MAX_VALUE, (path, attrs) -> attrs.isRegularFile() && path.getFileName().toString().endsWith(".class"))) {
+                mixinStream
+                        .map(Path::toAbsolutePath)
+                        .filter(MixinClassValidator::isMixinClass)
+                        .map(path -> mixinClassify(rootPath, path))
+                        .filter(this::isMixinEnabled)
+                        .forEach(possibleMixinClasses::add);
             } catch(IOException e) {
                 e.printStackTrace();
-                continue;
             }
-            mixinStream
-                    .filter(MixinClassValidator::isMixinClass)
-                    .map(path -> mixinClassify(rootPath, path))
-                    .filter(this::isMixinEnabled)
-                    .forEach(possibleMixinClasses::add);
         }
 
         return new ArrayList<>(possibleMixinClasses);
