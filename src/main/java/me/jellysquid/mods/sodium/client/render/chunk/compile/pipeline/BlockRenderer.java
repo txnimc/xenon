@@ -34,7 +34,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfig;
-import toni.xenon.api.BlockRendererRegistry;
+import org.embeddedt.embeddium.api.BlockRendererRegistry;
 
 import java.util.Arrays;
 import java.util.List;

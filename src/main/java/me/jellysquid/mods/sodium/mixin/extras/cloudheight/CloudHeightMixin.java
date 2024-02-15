@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import toni.xenon.extras.ExtrasConfig;
+import org.embeddedt.embeddium.extras.ExtrasConfig;
 
 @Mixin(value = DimensionSpecialEffects.class)
 public class CloudHeightMixin

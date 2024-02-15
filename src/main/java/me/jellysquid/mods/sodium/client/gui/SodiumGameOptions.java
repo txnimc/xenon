@@ -9,7 +9,7 @@ import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.gui.options.TextProvider;
 import net.minecraft.client.GraphicsStatus;
 import net.minecraft.network.chat.Component;
-import toni.xenon.config.ConfigMigrator;
+import org.embeddedt.embeddium.config.ConfigMigrator;
 
 import java.io.FileReader;
 import java.io.IOException;

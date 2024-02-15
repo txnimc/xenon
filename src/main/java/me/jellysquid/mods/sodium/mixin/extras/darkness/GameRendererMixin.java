@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import toni.xenon.extras.darkness.DarknessPlus;
+import org.embeddedt.embeddium.extras.darkness.DarknessPlus;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {

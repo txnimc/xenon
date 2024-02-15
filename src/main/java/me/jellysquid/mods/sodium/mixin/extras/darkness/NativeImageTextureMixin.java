@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import toni.xenon.extras.darkness.DarknessPlus;
-import toni.xenon.extras.darkness.accessors.TextureAccess;
+import org.embeddedt.embeddium.extras.darkness.DarknessPlus;
+import org.embeddedt.embeddium.extras.darkness.accessors.TextureAccess;
 
 @Mixin(DynamicTexture.class)
 public class NativeImageTextureMixin implements TextureAccess

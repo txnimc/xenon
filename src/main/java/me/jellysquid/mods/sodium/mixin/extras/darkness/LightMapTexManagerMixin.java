@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import toni.xenon.extras.darkness.accessors.TextureAccess;
+import org.embeddedt.embeddium.extras.darkness.accessors.TextureAccess;
 
 @Mixin(LightTexture.class)
 public class LightMapTexManagerMixin {

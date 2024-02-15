@@ -25,8 +25,8 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.client.model.data.ModelDataManager;
-import toni.xenon.api.ChunkMeshEvent;
-import toni.xenon.api.MeshAppender;
+import org.embeddedt.embeddium.api.ChunkMeshEvent;
+import org.embeddedt.embeddium.api.MeshAppender;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;

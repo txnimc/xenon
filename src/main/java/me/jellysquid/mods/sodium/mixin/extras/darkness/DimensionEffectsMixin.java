@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import toni.xenon.extras.ExtrasConfig;
-import toni.xenon.extras.darkness.DarknessPlus;
+import org.embeddedt.embeddium.extras.ExtrasConfig;
+import org.embeddedt.embeddium.extras.darkness.DarknessPlus;
 
 @Mixin(DimensionSpecialEffects.class)
 public class DimensionEffectsMixin {

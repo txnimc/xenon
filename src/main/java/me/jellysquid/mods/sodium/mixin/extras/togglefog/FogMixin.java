@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import toni.xenon.extras.ExtrasConfig;
+import org.embeddedt.embeddium.extras.ExtrasConfig;
 
 @Mixin(value = FogRenderer.class, priority = 910)
 public abstract class FogMixin {

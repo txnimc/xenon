@@ -2,7 +2,6 @@ package me.jellysquid.mods.sodium.client.gui;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.Window;
 import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.compat.modernui.MuiGuiScaleHook;
 import me.jellysquid.mods.sodium.client.gl.arena.staging.MappedStagingBuffer;
@@ -24,7 +23,7 @@ import net.minecraft.client.ParticleStatus;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
-import toni.xenon.extras.ExtrasOptions;
+import org.embeddedt.embeddium.extras.ExtrasOptions;
 
 import java.util.ArrayList;
 import java.util.List;

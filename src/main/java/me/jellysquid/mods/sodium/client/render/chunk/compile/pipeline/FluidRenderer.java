@@ -37,8 +37,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
-import toni.xenon.render.fluid.XenonFluidSpriteCache;
-import toni.xenon.tags.XenonTags;
+import org.embeddedt.embeddium.render.fluid.XenonFluidSpriteCache;
+import org.embeddedt.embeddium.tags.XenonTags;
 
 public class FluidRenderer {
     // TODO: allow this to be changed by vertex format

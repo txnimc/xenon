@@ -1,11 +1,9 @@
 package me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.data.fingerprint.HashedFingerprint;
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptionPages;
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptions;
-import me.jellysquid.mods.sodium.client.gui.SodiumOptionsGUI;
 import me.jellysquid.mods.sodium.client.gui.options.Option;
 import me.jellysquid.mods.sodium.client.gui.options.OptionFlag;
 import me.jellysquid.mods.sodium.client.gui.options.OptionPage;
@@ -26,14 +24,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.VideoSettingsScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraftforge.fml.loading.FMLLoader;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
-import toni.xenon.extras.pages.EntityCullingPage;
-import toni.xenon.extras.pages.OthersPage;
-import toni.xenon.extras.pages.QualityPlusPage;
-import toni.xenon.extras.pages.TrueDarknessPage;
+import org.embeddedt.embeddium.extras.pages.EntityCullingPage;
+import org.embeddedt.embeddium.extras.pages.OthersPage;
+import org.embeddedt.embeddium.extras.pages.QualityPlusPage;
+import org.embeddedt.embeddium.extras.pages.TrueDarknessPage;
 
 import java.io.IOException;
 import java.time.Instant;

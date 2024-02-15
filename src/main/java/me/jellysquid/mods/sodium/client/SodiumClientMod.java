@@ -11,7 +11,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkConstants;
 
-import toni.xenon.taint.incompats.IncompatibleModManager;
+import org.embeddedt.embeddium.taint.incompats.IncompatibleModManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
