@@ -223,7 +223,7 @@ publishMods {
 
     curseforge {
         projectId = "564239"
-        accessToken = providers.environmentVariable("CF_API_TOKEN")
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         minecraftVersions.add("minecraft_version"())
 
         incompatible {

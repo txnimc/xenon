@@ -19,6 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Build artifacts
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: ./gradlew build publishMods -Pbuild.release=true
       - name: Upload assets to GitHub
         uses: AButler/upload-release-assets@v2.0
