@@ -1,13 +1,17 @@
 package me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline;
 
 import it.unimi.dsi.fastutil.objects.Object2ByteLinkedOpenHashMap;
+import me.jellysquid.mods.sodium.client.SodiumClientMod;
+import me.jellysquid.mods.sodium.client.gui.SodiumGameOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.embeddedt.embeddium.extras.leafculling.LeafCulling;
 
 public class BlockOcclusionCache {
     private static final byte UNCACHED_VALUE = (byte) 127;
@@ -34,7 +38,28 @@ public class BlockOcclusionCache {
 
         BlockState adjState = view.getBlockState(adjPos);
 
-        if (selfState.skipRendering(adjState, facing) || (adjState.hidesNeighborFace(view, pos, selfState, facing.getOpposite()) && selfState.supportsExternalFaceHiding())) {
+        var skipRendering = selfState.skipRendering(adjState, facing);
+        var hideNeighbor = adjState.hidesNeighborFace(view, pos, selfState, facing.getOpposite());
+
+        if (selfState.getBlock() instanceof LeavesBlock )
+        {
+            if (SodiumClientMod.options().performance.leafCullingQuality == SodiumGameOptions.LeafCullingQuality.HOLLOW)
+                skipRendering = LeafCulling.shouldCullSide(view, pos, facing, 2);
+
+            if (adjState.getBlock() instanceof LeavesBlock && SodiumClientMod.options().performance.leafCullingQuality.isSolid())
+            {
+                var cullSelf = LeafCulling.surroundedByLeaves(view, pos);
+                var cullOther = LeafCulling.surroundedByLeaves(view, adjPos);
+
+                if (!cullSelf && cullOther)
+                    return false;
+
+                if (cullSelf && cullOther)
+                    return false;
+            }
+        }
+
+        if (skipRendering || (hideNeighbor && selfState.supportsExternalFaceHiding())) {
             return false;
         } else if (adjState.canOcclude()) {
             VoxelShape selfShape = selfState.getFaceOcclusionShape(view, pos, facing);

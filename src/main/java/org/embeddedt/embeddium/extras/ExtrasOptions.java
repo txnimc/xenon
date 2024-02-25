@@ -36,7 +36,8 @@ public class ExtrasOptions {
                 .setControl((option) -> new CyclingControl<>(option, ExtrasConfig.FPSDisplayMode.class, new Component[]{
                         Component.translatable("xenon.extras.options.common.off"),
                         Component.translatable("xenon.extras.options.common.simple"),
-                        Component.translatable("xenon.extras.options.common.advanced")
+                        Component.translatable("xenon.extras.options.common.advanced"),
+                        Component.translatable("xenon.extras.options.common.frametime")
                 }))
                 .setBinding(
                         (opts, value) -> ExtrasConfig.fpsDisplayMode.set(value),

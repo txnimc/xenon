@@ -46,6 +46,7 @@ public class SodiumGameOptions {
 
         public boolean animateOnlyVisibleTextures = true;
         public boolean useEntityCulling = true;
+        public LeafCullingQuality leafCullingQuality = LeafCullingQuality.SOLID_AGGRESSIVE;
         public boolean useFogOcclusion = true;
         public boolean useBlockFaceCulling = true;
         public boolean useCompactVertexFormat = true;
@@ -93,6 +94,28 @@ public class SodiumGameOptions {
 
         public boolean isFancy(GraphicsStatus graphicsMode) {
             return (this == FANCY) || (this == DEFAULT && (graphicsMode == GraphicsStatus.FANCY || graphicsMode == GraphicsStatus.FABULOUS));
+        }
+    }
+
+    public enum LeafCullingQuality implements TextProvider {
+        NONE("options.leaf_culling.none"),
+        HOLLOW("options.leaf_culling.hollow"),
+        SOLID("options.leaf_culling.solid"),
+        SOLID_AGGRESSIVE("options.leaf_culling.solid_aggressive");
+
+        private final Component name;
+
+        LeafCullingQuality(String name) {
+            this.name = Component.translatable(name);
+        }
+
+        @Override
+        public Component getLocalizedName() {
+            return this.name;
+        }
+
+        public boolean isSolid() {
+            return this == SOLID || this == SOLID_AGGRESSIVE;
         }
     }
 

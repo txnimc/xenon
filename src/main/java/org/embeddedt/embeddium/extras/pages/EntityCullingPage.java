@@ -10,6 +10,7 @@ import me.jellysquid.mods.sodium.client.gui.options.control.SliderControl;
 import me.jellysquid.mods.sodium.client.gui.options.control.TickBoxControl;
 import me.jellysquid.mods.sodium.client.gui.options.storage.SodiumOptionsStorage;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import org.embeddedt.embeddium.extras.ExtrasConfig;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class EntityCullingPage extends OptionPage {
                             int result = value * value;
                             ExtrasConfig.entityCullingDistanceX.set(result);
                             ExtrasConfig.entityCullingDistanceXCache = result;
+                            ExtrasConfig.hostileDistanceXCache = (int) (value * value * (ExtrasConfig.hostileEntityModifier.get() / 100f));
                         },
                         (options) -> Math.toIntExact(Math.round(Math.sqrt(ExtrasConfig.entityCullingDistanceXCache))))
                 .setImpact(OptionImpact.HIGH)
@@ -60,17 +62,36 @@ public class EntityCullingPage extends OptionPage {
                         (options, value) -> {
                             ExtrasConfig.entityCullingDistanceY.set(value);
                             ExtrasConfig.entityCullingDistanceYCache = value;
+                            ExtrasConfig.hostileDistanceYCache = (int) (value * (ExtrasConfig.hostileEntityModifier.get() / 100f));
                         },
                         (options) -> ExtrasConfig.entityCullingDistanceYCache)
                 .setImpact(OptionImpact.HIGH)
                 .build();
 
+        var hostileEntityModifier = OptionImpl.createBuilder(int.class, performanceOptionsStorage)
+                .setName(Component.translatable("xenon.extras.options.culling.entity.distance.hostile.title"))
+                .setTooltip(Component.translatable("xenon.extras.options.culling.entity.distance.hostile.desc"))
+                .setControl((option) -> new SliderControl(option, 25, 200, 5, ControlValueFormatter.percentage()))
+                .setBinding(
+                        (options, value) -> {
+                            ExtrasConfig.hostileEntityModifier.set(value);
+
+                            var x = Mth.sqrt(ExtrasConfig.entityCullingDistanceXCache) * (value / 100f);
+                            var y = ExtrasConfig.hostileDistanceYCache;
+
+                            ExtrasConfig.hostileDistanceXCache = (int) (x * x);
+                            ExtrasConfig.hostileDistanceYCache = (int) (y * (value / 100f));
+                        },
+                        (options) -> ExtrasConfig.hostileEntityModifier.get())
+                .setImpact(OptionImpact.HIGH)
+                .build();
 
         groups.add(OptionGroup
                 .createBuilder()
                 .add(enableDistanceChecks)
                 .add(maxEntityDistance)
                 .add(maxEntityDistanceVertical)
+                .add(hostileEntityModifier)
                 .build()
         );
 

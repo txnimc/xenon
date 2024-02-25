@@ -5,8 +5,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FrameTimer;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -62,7 +64,7 @@ public class DebugOverlayEvent {
         // FPS
         switch (mode) {
             case SIMPLE -> DISPLAY.append(calculateFPS$getColor(mc)).add(fix(fps)).add(" ").add(MSG_FPS.getString()).add(ChatFormatting.RESET);
-            case ADVANCED -> {
+            case FRAMETIME, ADVANCED -> {
                 DISPLAY.append(calculateFPS$getColor(mc)).add(fix(fps)).add(ChatFormatting.RESET);
                 DISPLAY.append(calculateMinFPS$getColor(mc)).add(MSG_MIN).add(" ").add(fix(minFPS)).add(ChatFormatting.RESET);
                 DISPLAY.append(calculateAvgFPS$getColor(mc)).add(MSG_AVG).add(" ").add(fix(avgFPS)).add(ChatFormatting.RESET);
@@ -103,8 +105,59 @@ public class DebugOverlayEvent {
         }
 
         graphics.drawString(font, displayString, posX, posY, 0xffffffff, true);
+
+        if (mode == ExtrasConfig.FPSDisplayMode.FRAMETIME)
+            drawChart(graphics, Minecraft.getInstance().getFrameTimer(), 0, (int) (graphics.guiWidth() / 5.5f), (int) (posY + font.lineHeight + 1));
+
         DISPLAY.release();
         graphics.pose().popPose();
+    }
+
+
+    private static void drawChart(GuiGraphics graphics, FrameTimer timer, int x, int width, int height) {
+        var mc = Minecraft.getInstance();
+
+        int logStart = timer.getLogStart();
+        int logEnd = timer.getLogEnd();
+        long[] along = timer.getLog();
+        int xPos = x;
+        int widthDiff = Math.max(0, along.length - width);
+        int wrapped = timer.wrapIndex(logStart + widthDiff);
+
+        int guiHeight = height;//graphics.guiHeight();
+
+        while(wrapped != logEnd) {
+            int barHeight = timer.scaleSampleTo(along[wrapped], 30, 60) / 4;
+            int heightMax = 30;
+            int color = getSampleColor(Mth.clamp(barHeight, 0, heightMax), 0, heightMax / 2, heightMax);
+            graphics.fill(RenderType.guiOverlay(), xPos, guiHeight, xPos + 1, guiHeight + barHeight, color);
+
+            ++xPos;
+            wrapped = timer.wrapIndex(wrapped + 1);
+        }
+
+    }
+
+    private static int getSampleColor(int height, int heightMin, int heightMid, int heightMax) {
+        return height < heightMid
+                ? colorLerp(1712789271, -1140870125, (float)height / (float)heightMid)
+                : colorLerp(-1140870125, -1140908238, (float)(height - heightMid) / (float)(heightMax - heightMid));
+    }
+
+    private static int colorLerp(int col1, int col2, float factor) {
+        int i = col1 >> 24 & 255;
+        int j = col1 >> 16 & 255;
+        int k = col1 >> 8 & 255;
+        int l = col1 & 255;
+        int m = col2 >> 24 & 255;
+        int n = col2 >> 16 & 255;
+        int o = col2 >> 8 & 255;
+        int p = col2 & 255;
+        int q = Mth.clamp((int)Mth.lerp(factor, (float)i, (float)m), 0, 255);
+        int r = Mth.clamp((int)Mth.lerp(factor, (float)j, (float)n), 0, 255);
+        int s = Mth.clamp((int)Mth.lerp(factor, (float)k, (float)o), 0, 255);
+        int t = Mth.clamp((int)Mth.lerp(factor, (float)l, (float)p), 0, 255);
+        return q << 24 | r << 16 | s << 8 | t;
     }
 
     private static ChatFormatting calculateFPS$getColor(Minecraft mc) {

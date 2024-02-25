@@ -108,4 +108,8 @@ public class BlockRenderContext {
     public RenderType renderLayer() {
         return this.renderLayer;
     }
+
+    public void setRenderLayer(RenderType layer) {
+        this.renderLayer = layer;
+    }
 }

@@ -75,6 +75,7 @@
   "xenon.extras.options.common.on": "On",
   "xenon.extras.options.common.simple": "Simple",
   "xenon.extras.options.common.advanced": "Advanced",
+  "xenon.extras.options.common.frametime": "Frametime",
   "xenon.extras.options.common.attach": "Attach",
   "xenon.extras.options.common.replace": "Replace",
   "xenon.extras.options.common.experimental": "[EXPERIMENTAL]",
@@ -96,6 +97,9 @@
   "xenon.extras.options.culling.tile.distance.horizontal.desc": "Hides block entities beyond this many blocks. Huge performance increase, especially around lots of modded machines.",
   "xenon.extras.options.culling.tile.distance.vertical.title": "Block Entities Max Distance (Vertical)",
   "xenon.extras.options.culling.tile.distance.vertical.desc": "Hides block entities underneath this many blocks, improving performance above caves (if you have your machines in caves, for some reason). This should ideally be set lower than the horizontal distance.",
+
+  "xenon.extras.options.culling.entity.distance.hostile.title": "Hostile Entity Modifier",
+  "xenon.extras.options.culling.entity.distance.hostile.desc": "Allows separate control over the distance at which hostile vs. passive entities are culled.",
 
   "xenon.extras.options.darkness.page": "True Darkness",
   "xenon.extras.options.darkness.mode.title": "Darkness Mode",
@@ -205,6 +209,12 @@
   "xenon.extras.options.others.borderless.attachmode.title": "Borderless Fullscreen on F11",
   "xenon.extras.options.others.borderless.attachmode.desc": "Configures how Borderless Fullscreen should be attached\n\nATTACH - Adds it between windowed and Fullscreen\nREPLACE - Replaced Fullscreen with Borderless Fullscreen\nOFF - Disables Borderless Fullscreen attachment to F11 key",
   "xenon.extras.options.others.languagescreen.fastreload.title": "Fast Language Reload",
-  "xenon.extras.options.others.languagescreen.fastreload.desc": "If enabled, Language updates only reload language instead of all resources, a 99.9% extra of speed"
+  "xenon.extras.options.others.languagescreen.fastreload.desc": "If enabled, Language updates only reload language instead of all resources, a 99.9% extra of speed",
+  "xenon.extras.options.leaf_culling.name": "Leaf Culling Mode",
+  "xenon.extras.options.leaf_culling.tooltip": "If enabled, leaves behind other leaves will be culled to improve performance. Hollow will aggressively cull faces, and Solid mode will enable fast solid block rendering of leaves behind other leaves.",
 
+  "options.leaf_culling.none": "None",
+  "options.leaf_culling.hollow": "Hollow",
+  "options.leaf_culling.solid": "Solid",
+  "options.leaf_culling.solid_aggressive": "Solid Aggressive"
 }

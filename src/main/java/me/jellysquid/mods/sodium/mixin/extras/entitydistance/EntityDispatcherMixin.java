@@ -3,6 +3,9 @@ package me.jellysquid.mods.sodium.mixin.extras.entitydistance;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Monster;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,13 +20,15 @@ public class EntityDispatcherMixin {
     public <E extends Entity> void inject$shouldRender(E entity, Frustum clippingHelper, double cameraX, double cameraY, double cameraZ, CallbackInfoReturnable<Boolean> cir) {
         if (!ExtrasConfig.entityDistanceCullingCache) return;
 
+        var isHostile = entity instanceof Monster;
+
         if (!((IWhitelistCheck) entity.getType()).embPlus$isAllowed() && !ExtrasTools.isEntityWithinDistance(
                 entity,
                 cameraX,
                 cameraY,
                 cameraZ,
-                ExtrasConfig.entityCullingDistanceYCache,
-                ExtrasConfig.entityCullingDistanceXCache
+                isHostile ? ExtrasConfig.hostileDistanceYCache : ExtrasConfig.entityCullingDistanceYCache,
+                isHostile ? ExtrasConfig.hostileDistanceXCache : ExtrasConfig.entityCullingDistanceXCache
         )) {
             cir.setReturnValue(false);
         }

@@ -2,7 +2,6 @@ package me.jellysquid.mods.sodium.client.gui;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.compat.modernui.MuiGuiScaleHook;
 import me.jellysquid.mods.sodium.client.gl.arena.staging.MappedStagingBuffer;
 import me.jellysquid.mods.sodium.client.gl.device.RenderDevice;
@@ -253,6 +252,18 @@ public class SodiumGameOptionPages {
                         .setFlags(OptionFlag.REQUIRES_RENDERER_UPDATE)
                         .build())
                 .build()
+        );
+
+        groups.add(OptionGroup.createBuilder()
+                .add(OptionImpl.createBuilder(SodiumGameOptions.LeafCullingQuality.class, sodiumOpts)
+                        .setName(Component.translatable("xenon.extras.options.leaf_culling.name"))
+                        .setTooltip(Component.translatable("xenon.extras.options.leaf_culling.tooltip"))
+                        .setControl(option -> new CyclingControl<>(option, SodiumGameOptions.LeafCullingQuality.class))
+                        .setBinding((opts, value) -> opts.performance.leafCullingQuality = value, opts -> opts.performance.leafCullingQuality)
+                        .setImpact(OptionImpact.MEDIUM)
+                        .setFlags(OptionFlag.REQUIRES_RENDERER_RELOAD)
+                        .build()
+                ).build()
         );
 
         groups.add(OptionGroup.createBuilder()

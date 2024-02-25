@@ -7,6 +7,7 @@ import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.mixin.extras.borderless.accessors.MainWindowAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
@@ -79,6 +80,7 @@ public class ExtrasConfig {
     public static final IntValue tileEntityCullingDistanceX;
     public static final IntValue tileEntityCullingDistanceY;
     public static final BooleanValue entityDistanceCulling;
+    public static final IntValue hostileEntityModifier;
     public static final IntValue entityCullingDistanceX;
     public static final IntValue entityCullingDistanceY;
     public static final ConfigValue<List<? extends String>> entityWhitelist; // QUICK CHECK
@@ -89,6 +91,8 @@ public class ExtrasConfig {
     public static volatile boolean entityDistanceCullingCache;
     public static volatile int entityCullingDistanceXCache;
     public static volatile int entityCullingDistanceYCache;
+    public static volatile int hostileDistanceXCache;
+    public static volatile int hostileDistanceYCache;
 
     // OTHERS
     public static final EnumValue<AttachMode> borderlessAttachModeF11;
@@ -125,7 +129,7 @@ public class ExtrasConfig {
 
         fpsDisplayMode = BUILDER
                 .comment("Configure FPS Display mode", "Complete mode gives you min FPS count and average count")
-                .defineEnum("fpsDisplay", FPSDisplayMode.ADVANCED);
+                .defineEnum("fpsDisplay", FPSDisplayMode.FRAMETIME);
 
         fpsDisplayGravity = BUILDER
                 .comment("Configure FPS Display gravity", "Places counter on specified corner of your screen")
@@ -255,8 +259,9 @@ public class ExtrasConfig {
         // xenonextras -> performance -> distanceCulling -> entities
         BUILDER.push("entities");
         entityDistanceCulling = BUILDER
-                .comment("Toggles distance culling for entities", "Maybe you use another mod for that :(")
+                .comment("Toggles distance culling for entities")
                 .define("enable", true);
+
         entityCullingDistanceX = BUILDER
                 .comment("Configure horizontal max distance before cull entities", "Value is squared, default was 64^2 (or 64x64)")
                 .defineInRange("cullingMaxDistanceX", 4096, 0, Integer.MAX_VALUE);
@@ -264,6 +269,10 @@ public class ExtrasConfig {
         entityCullingDistanceY = BUILDER
                 .comment("Configure vertical max distance before cull entities", "Value is raw")
                 .defineInRange("cullingMaxDistanceY", 32, 0, 512);
+
+        hostileEntityModifier = BUILDER
+                .comment("Configure modifier applied to hostile entities", "Value is raw, 50% - 200%")
+                .defineInRange("hostileEntityModifier", 100, 25, 200);
 
         entityWhitelist = BUILDER
                 .comment("List of all Entities to be ignored by distance culling", "Uses ResourceLocation to identify it", "Example 1: \"minecraft:bat\" - Ignores bats only", "Example 2: \"alexsmobs:*\" - ignores all entities for alexmobs mod")
@@ -340,6 +349,10 @@ public class ExtrasConfig {
         entityCullingDistanceXCache = entityCullingDistanceX.get();
         entityCullingDistanceYCache = entityCullingDistanceY.get();
 
+        var x = Mth.sqrt(entityCullingDistanceXCache) * (hostileEntityModifier.get() / 100f);
+        hostileDistanceXCache = (int) (x * x);
+        hostileDistanceYCache = (int) (entityCullingDistanceYCache * (hostileEntityModifier.get() / 100f));
+
         SodiumClientMod.logger().warn("Cache updated successfully");
     }
 
@@ -367,7 +380,7 @@ public class ExtrasConfig {
 
     /* CONFIG VALUES */
     public enum FPSDisplayMode {
-        OFF, SIMPLE, ADVANCED;
+        OFF, SIMPLE, ADVANCED, FRAMETIME;
 
         public boolean off() {
             return this == OFF;

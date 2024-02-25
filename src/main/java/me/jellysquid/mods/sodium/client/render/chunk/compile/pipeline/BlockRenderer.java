@@ -2,8 +2,10 @@ package me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import me.jellysquid.mods.sodium.client.SodiumClientMod;
 import me.jellysquid.mods.sodium.client.compat.ccl.SinkingVertexBuilder;
 import me.jellysquid.mods.sodium.client.compat.forge.ForgeBlockRenderer;
+import me.jellysquid.mods.sodium.client.gui.SodiumGameOptions;
 import me.jellysquid.mods.sodium.client.model.color.ColorProvider;
 import me.jellysquid.mods.sodium.client.model.color.ColorProviderRegistry;
 import me.jellysquid.mods.sodium.client.model.light.LightMode;
@@ -30,11 +32,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfig;
 import org.embeddedt.embeddium.api.BlockRendererRegistry;
+import org.embeddedt.embeddium.extras.leafculling.LeafCulling;
 
 import java.util.Arrays;
 import java.util.List;
@@ -120,6 +124,27 @@ public class BlockRenderer {
         }
 
         for (Direction face : DirectionUtil.ALL_DIRECTIONS) {
+
+            // custom leaf block rendering
+            if (ctx.state().getBlock() instanceof LeavesBlock
+                    && SodiumClientMod.options().performance.leafCullingQuality.isSolid()
+                    && LeafCulling.surroundedByLeaves(ctx.localSlice(), ctx.pos()))
+            {
+                var renderLayer = ctx.renderLayer();
+                ctx.setRenderLayer(RenderType.solid());
+
+                List<BakedQuad> quads = this.getGeometry(ctx, face);
+                var leafmaterial = DefaultMaterials.forRenderLayer(ctx.renderLayer());
+                var leafmeshBuilder = buffers.get(leafmaterial);
+
+                if (!quads.isEmpty() && this.isFaceVisible(ctx, face)) {
+                    this.renderQuadList(ctx, leafmaterial, lighter, colorizer, renderOffset, leafmeshBuilder, quads, face);
+                }
+
+                ctx.setRenderLayer(renderLayer);
+                continue;
+            }
+
             List<BakedQuad> quads = this.getGeometry(ctx, face);
 
             if (!quads.isEmpty() && this.isFaceVisible(ctx, face)) {
