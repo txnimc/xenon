@@ -140,13 +140,19 @@ fun DependencyHandlerScope.compatCompileOnly(dependency: Dependency) {
 }
 
 dependencies {
-    minecraft("net.minecraftforge:forge:${"minecraft_version"()}-${"forge_version"()}")
+    minecraft("net.neoforged:forge:${"minecraft_version"()}-${"forge_version"()}")
 
     // Mods
     compatCompileOnly(fg.deobf("curse.maven:codechickenlib-242818:${"codechicken_fileid"()}"))
     compatCompileOnly(fg.deobf("curse.maven:immersiveengineering-231951:${"ie_fileid"()}"))
 
     annotationProcessor("net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
+
+    compileOnly("io.github.llamalad7:mixinextras-common:0.3.5")
+    annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5")
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.3.5")) {
+        jarJar.ranged(this, "[0.3.5,)")
+    }
 
     // runtime remapping at home
     fileTree(extraModsDir) {
