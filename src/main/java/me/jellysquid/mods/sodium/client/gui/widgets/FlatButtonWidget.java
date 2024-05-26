@@ -1,5 +1,6 @@
 package me.jellysquid.mods.sodium.client.gui.widgets;
 
+import me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui.FlatButtonWidgetExtended;
 import me.jellysquid.mods.sodium.client.util.Dim2i;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class FlatButtonWidget extends AbstractWidget implements Renderable {
+public class FlatButtonWidget extends AbstractWidget implements Renderable, FlatButtonWidgetExtended {
     protected final Dim2i dim;
     private final Runnable action;
 
@@ -172,4 +173,8 @@ public class FlatButtonWidget extends AbstractWidget implements Renderable {
         }
     }
 
+    @Override
+    public boolean isLeftAligned() {
+        return this.leftAligned;
+    }
 }

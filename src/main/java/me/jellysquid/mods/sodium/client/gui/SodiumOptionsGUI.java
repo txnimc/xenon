@@ -52,7 +52,7 @@ public class SodiumOptionsGUI extends Screen implements ScreenPromptable {
     // Donation prompt should not be shown with Controllable present (as it's impossible to exit) or in a dev env.
     private static final boolean IS_POPUP_SAFE = !PlatformUtil.modPresent("controllable") && !PlatformUtil.isDevelopmentEnvironment();
 
-    private final List<OptionPage> pages = new ArrayList<>();
+    public final List<OptionPage> pages = new ArrayList<>();
 
     private final List<ControlElement<?>> controls = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class SodiumOptionsGUI extends Screen implements ScreenPromptable {
     private boolean forceOldScreen;
 
     public SodiumOptionsGUI(Screen prevScreen) {
-        super(Component.literal(MODNAME + " Options"));
+        super(Component.translatable(MODNAME + " Options"));
 
         this.prevScreen = prevScreen;
 
