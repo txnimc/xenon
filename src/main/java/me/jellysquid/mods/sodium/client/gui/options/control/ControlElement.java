@@ -3,6 +3,7 @@ package me.jellysquid.mods.sodium.client.gui.options.control;
 import me.jellysquid.mods.sodium.client.gui.options.Option;
 import me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui.OptionExtended;
 import me.jellysquid.mods.sodium.client.gui.widgets.AbstractWidget;
+import me.jellysquid.mods.sodium.client.gui.widgets.FlatButtonWidget;
 import me.jellysquid.mods.sodium.client.util.Dim2i;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.ComponentPath;
@@ -11,12 +12,15 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ControlElement<T> extends AbstractWidget {
     protected final Option<T> option;
 
     protected final Dim2i dim;
+
+    private @NotNull FlatButtonWidget.Style style = FlatButtonWidget.Style.defaults();
 
     public ControlElement(Option<T> option, Dim2i dim) {
         this.option = option;

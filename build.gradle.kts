@@ -1,3 +1,5 @@
+import org.w3c.dom.Element
+
 plugins {
     id("idea")
     id("net.neoforged.gradle") version("6.0.21")
@@ -9,6 +11,8 @@ plugins {
     id("org.ajoberstar.grgit") version("5.0.0")
 
     id("me.modmuss50.mod-publish-plugin") version("0.3.4")
+
+    id("org.parchmentmc.librarian.forgegradle") version("1.2.0.7-dev-SNAPSHOT")
 }
 
 operator fun String.invoke(): String {
@@ -21,46 +25,29 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
-version = "${"mod_version"()}${getVersionMetadata()}+mc${"minecraft_version"()}"
+version = getModVersion()
 group = "maven_group"()
+println("Embeddium: $version")
 
 base {
     archivesName = "archives_base_name"()
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+// java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+val extraSourceSets = arrayOf("legacy", "compat")
 
 sourceSets {
     val main = getByName("main")
-    val api = create("api")
-    val legacy = create("legacy")
-    val compat = create("compat")
-    
-    api.apply {
-        java {
-            compileClasspath += main.compileClasspath
-        }
-    }
 
-    main.apply {
-        java {
-            compileClasspath += api.output
-            runtimeClasspath += api.output
-        }
-    }
-
-    legacy.apply {
-        java {
-            compileClasspath += main.compileClasspath
-            compileClasspath += main.output
-        }
-    }
-
-    compat.apply {
-        java {
-            compileClasspath += main.compileClasspath
-            compileClasspath += main.output
+    extraSourceSets.forEach {
+        val sourceset = create(it)
+        sourceset.apply {
+            java {
+                compileClasspath += main.compileClasspath
+                compileClasspath += main.output
+            }
         }
     }
 }
@@ -83,9 +70,14 @@ repositories {
     maven("https://maven.covers1624.net/")
 }
 
+jarJar.enable()
 
 minecraft {
-    mappings("official", "minecraft_version"())
+    if(rootProject.properties.containsKey("parchment_version")) {
+        mappings("parchment", "parchment_version"())
+    } else {
+        mappings("official", "minecraft_version"())
+    }
     copyIdeResources = true
     accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
     runs {
@@ -100,9 +92,9 @@ minecraft {
             mods {
                 create("xenon") {
                     sources(sourceSets["main"])
-                    sources(sourceSets["compat"])
-                    sources(sourceSets["api"])
-                    sources(sourceSets["legacy"])
+                    extraSourceSets.forEach {
+                        sources(sourceSets[it])
+                    }
                 }
             }
         }
@@ -137,6 +129,17 @@ mixin {
 
 fun DependencyHandlerScope.compatCompileOnly(dependency: Dependency) {
     "compatCompileOnly"(dependency)
+}
+
+// Force LWJGL 3.3.3 for Java 21 compat
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            when (requested.group.toString()) {
+                "org.lwjgl" -> useVersion("3.3.3")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -184,24 +187,27 @@ java {
     withSourcesJar()
 }
 
-tasks.jar {
-    from("LICENSE") {
-        rename { "${it}_${"archives_base_name"()}"}
-    }
-    from(sourceSets["compat"].output.classesDirs)
-    from(sourceSets["compat"].output.resourcesDir)
-    from(sourceSets["api"].output.classesDirs)
-    from(sourceSets["api"].output.resourcesDir)
-    from(sourceSets["legacy"].output.classesDirs)
-    from(sourceSets["legacy"].output.resourcesDir)
+tasks.named<Jar>("jar").configure {
+    archiveClassifier = "slim"
+}
 
-    finalizedBy("reobfJar")
+tasks.jarJar {
+    from("COPYING", "COPYING.LESSER", "README.md")
+
+    extraSourceSets.forEach {
+        from(sourceSets[it].output.classesDirs)
+        from(sourceSets[it].output.resourcesDir)
+    }
+
+    finalizedBy("reobfJarJar")
+
+    archiveClassifier = ""
 }
 
 tasks.named<Jar>("sourcesJar").configure {
-    from(sourceSets["compat"].allJava)
-    from(sourceSets["api"].allJava)
-    from(sourceSets["legacy"].allJava)
+    extraSourceSets.forEach {
+        from(sourceSets[it].allJava)
+    }
 }
 
 publishing {
@@ -210,8 +216,26 @@ publishing {
     }
     publications {
         this.create<MavenPublication>("mavenJava") {
-            artifact(tasks.jar)
+            artifact(tasks.named("jarJar"))
             artifact(tasks.named("sourcesJar"))
+            fg.component(this)
+            pom {
+                withXml {
+                    // Workaround for NG only checking for net.minecraftforge group
+                    val root = this.asElement()
+
+                    val depsParent = (root.getElementsByTagName("dependencies").item(0) as Element)
+                    val allDeps = depsParent.getElementsByTagName("dependency")
+
+                    (0..allDeps.length).map { allDeps.item(it) }.filterIsInstance<Element>().filter {
+                        val artifactId = it.getElementsByTagName("artifactId").item(0).textContent
+                        val groupId = it.getElementsByTagName("groupId").item(0).textContent
+                        (artifactId == "forge") && (groupId == "net.neoforged")
+                    }.forEach {
+                        depsParent.removeChild(it)
+                    }
+                }
+            }
         }
     }
 
@@ -221,7 +245,7 @@ publishing {
 }
 
 publishMods {
-    file = tasks.jar.get().archiveFile
+    file = tasks.jarJar.get().archiveFile
     changelog = "https://github.com/anthxnymc/xenon/wiki/Changelog"
     type = STABLE
     modLoaders.add("forge")
@@ -243,6 +267,10 @@ publishMods {
         incompatible {
             slug = "magnesium-extras"
         }
+
+        incompatible {
+            slug = "textrues-embeddium-options"
+        }
     }
     modrinth {
         projectId = "aWDwN8NN"
@@ -256,24 +284,35 @@ publishMods {
         incompatible {
             slug = "embeddium"
         }
+
+        incompatible {
+            slug = "textrues-embeddium-options"
+        }
     }
 
     displayName = "[${"minecraft_version"()}] Xenon ${"mod_version"()}"
 }
 
-fun getVersionMetadata(): String {
-    // CI builds only
+fun getModVersion(): String {
+    var baseVersion: String = project.properties["mod_version"].toString()
+    val mcMetadata: String = "+mc" + project.properties["minecraft_version"]
+
     if (project.hasProperty("build.release")) {
-        return "" // no tag whatsoever
+        return baseVersion + mcMetadata // no tag whatsoever
     }
+
+    // Increment patch version
+    baseVersion = baseVersion.split(".").mapIndexed {
+        index, s -> if(index == 2) (s.toInt() + 1) else s
+    }.joinToString(separator = ".")
 
     val head = grgit.head()
     var id = head.abbreviatedId
 
     // Flag the build if the build tree is not clean
     if (!grgit.status().isClean) {
-        id += ".dirty"
+        id += "-dirty"
     }
 
-    return "-git.${id}"
+    return baseVersion + "-git-${id}" + mcMetadata
 }

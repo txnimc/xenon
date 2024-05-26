@@ -22,7 +22,7 @@ Discord. You can report issues on the [Xenon GitHub](https://github.com/anthxnym
 Xenon will work with everything Embeddium does, as it is a fork. We intend to keep compatibility
 with upstream and Embeddium / Forge Sodium addons as much as possible.
 
-## Shaders
+If you're looking to add Embeddium to your development environment, please take a look at the [dedicated wiki page](https://github.com/embeddedt/embeddium/wiki/For-Developers) for instructions & recommended guidelines for integration.
 
 For now, please continue to use [Oculus](https://www.curseforge.com/minecraft/mc-mods/oculus) if you want shader support.
 If you encounter issues with shaders installed, disable Oculus first, and if that fixes it, report the issue to them instead. 
@@ -40,3 +40,6 @@ If you encounter issues with shaders installed, disable Oculus first, and if tha
 ## License
 
 Xenon currently follows the license of upstream Sodium (LGPL-3.0).
+
+Portions of the option screen code are based on Reese's Sodium Options by FlashyReese, and are used under the terms of
+the [MIT license](https://opensource.org/license/mit), located in `src/main/resources/licenses/rso.txt`. 

@@ -7,7 +7,9 @@ import me.jellysquid.mods.sodium.client.gui.options.storage.OptionStorage;
 import me.jellysquid.mods.sodium.client.gui.reesesoptions.client.gui.OptionExtended;
 import me.jellysquid.mods.sodium.client.util.Dim2i;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.Validate;
+import org.embeddedt.embeddium.client.gui.options.OptionIdentifier;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +25,7 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
 
     private final EnumSet<OptionFlag> flags;
 
+    private final OptionIdentifier<T> id;
     private final Component name;
     private final Component tooltip;
 
@@ -39,6 +42,7 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
     private final boolean enabled;
 
     private OptionImpl(OptionStorage<S> storage,
+                       OptionIdentifier<T> id,
                        Component name,
                        Component tooltip,
                        OptionBinding<S, T> binding,
@@ -46,6 +50,7 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
                        EnumSet<OptionFlag> flags,
                        OptionImpact impact,
                        boolean enabled) {
+        this.id = id;
         this.storage = storage;
         this.name = name;
         this.tooltip = tooltip;
@@ -56,6 +61,11 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
         this.enabled = enabled;
 
         this.reset();
+    }
+
+    @Override
+    public OptionIdentifier<T> getId() {
+        return id;
     }
 
     @Override
@@ -161,11 +171,13 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
     }
 
     public static <S, T> OptionImpl.Builder<S, T> createBuilder(@SuppressWarnings("unused") Class<T> type, OptionStorage<S> storage) {
-        return new Builder<>(storage);
+        return new Builder<>(storage, type);
     }
 
     public static class Builder<S, T> {
         private final OptionStorage<S> storage;
+        private final Class<T> type;
+        private OptionIdentifier<T> id;
         private Component name;
         private Component tooltip;
         private OptionBinding<S, T> binding;
@@ -174,8 +186,24 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
         private final EnumSet<OptionFlag> flags = EnumSet.noneOf(OptionFlag.class);
         private boolean enabled = true;
 
-        private Builder(OptionStorage<S> storage) {
+        private Builder(OptionStorage<S> storage, Class<T> type) {
             this.storage = storage;
+            this.type = type;
+        }
+
+        public Builder<S, T> setId(ResourceLocation id) {
+            Validate.notNull(id, "Id must not be null");
+
+            this.id = OptionIdentifier.create(id.getNamespace(), id.getPath(), this.type);
+            return this;
+        }
+
+        public Builder<S, T> setId(OptionIdentifier<T> id) {
+            Validate.notNull(id, "Id must not be null");
+
+            this.id = id;
+
+            return this;
         }
 
         public Builder<S, T> setName(Component name) {
@@ -239,12 +267,27 @@ public class OptionImpl<S, T> implements Option<T>, OptionExtended {
         }
 
         public OptionImpl<S, T> build() {
-            Validate.notNull(this.name, "Name must be specified");
-            Validate.notNull(this.tooltip, "Tooltip must be specified");
+            if (this.id == null) {
+                // FIXME enforce IDs and make nullable
+                this.id = (OptionIdentifier<T>)OptionIdentifier.EMPTY;
+                //SodiumClientMod.logger().warn("Id must be specified in option '{}', this might throw a exception on a future release", this.name.getString());
+            } else {
+                if (this.name == null) {
+                    this.name = Component.translatable(this.id.getModId() + ".options." + this.id.getPath() + ".name");
+                }
+
+                if (this.tooltip == null) {
+                    this.tooltip = Component.translatable(this.id.getModId() + ".options." + this.id.getPath() + ".tooltip");
+                }
+            }
+
+            Validate.notNull(this.name, "Name must be specified or inferred from a specified ID");
+            Validate.notNull(this.tooltip, "Tooltip must be specified or inferred from a specified ID");
             Validate.notNull(this.binding, "Option binding must be specified");
             Validate.notNull(this.control, "Control must be specified");
 
-            return new OptionImpl<>(this.storage, this.name, this.tooltip, this.binding, this.control, this.flags, this.impact, this.enabled);
+            OptionImpl<S, T> impl = new OptionImpl<>(this.storage, this.id, this.name, this.tooltip, this.binding, this.control, this.flags, this.impact, this.enabled);
+            return impl;
         }
     }
 }
