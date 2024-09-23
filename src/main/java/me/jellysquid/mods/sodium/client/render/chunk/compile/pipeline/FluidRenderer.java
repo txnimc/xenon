@@ -21,6 +21,7 @@ import me.jellysquid.mods.sodium.client.render.chunk.vertex.format.ChunkVertexEn
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
 import me.jellysquid.mods.sodium.client.util.DirectionUtil;
 import net.caffeinemc.mods.sodium.api.util.ColorABGR;
+import net.caffeinemc.mods.sodium.api.util.ColorMixer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -40,6 +41,7 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.embeddedt.embeddium.render.fluid.XenonFluidSpriteCache;
 import org.embeddedt.embeddium.tags.XenonTags;
+import org.embeddedt.embeddium.render.chunk.ChunkColorWriter;
 
 public class FluidRenderer {
     // TODO: allow this to be changed by vertex format
@@ -63,6 +65,8 @@ public class FluidRenderer {
     private final XenonFluidSpriteCache fluidSpriteCache = new XenonFluidSpriteCache();
 
     private final SinkingVertexBuilder fluidVertexBuilder = new SinkingVertexBuilder();
+
+    private final ChunkColorWriter colorEncoder = ChunkColorWriter.get();
 ;
     public FluidRenderer(ColorProviderRegistry colorProviderRegistry, LightPipelineProvider lighters) {
         this.quad.setLightFace(Direction.UP);
@@ -426,7 +430,7 @@ public class FluidRenderer {
         // multiply the per-vertex color against the combined brightness
         // the combined brightness is the per-vertex brightness multiplied by the block's brightness
         for (int i = 0; i < 4; i++) {
-            this.quadColors[i] = ColorABGR.withAlpha(this.quadColors[i], light.br[i] * brightness);
+            this.quadColors[i] = colorEncoder.writeColor(this.quadColors[i], light.br[i] * brightness);
         }
     }
 

@@ -2,7 +2,7 @@ import org.w3c.dom.Element
 
 plugins {
     id("idea")
-    id("net.neoforged.gradle") version("6.0.21")
+    id("net.minecraftforge.gradle") version("6.0.25")
     id("maven-publish")
     id("org.spongepowered.mixin") version("0.7.38")
 
@@ -13,6 +13,8 @@ plugins {
     id("me.modmuss50.mod-publish-plugin") version("0.3.4")
 
     id("org.parchmentmc.librarian.forgegradle") version("1.2.0.7-dev-SNAPSHOT")
+
+    id("embeddium-fabric-remapper")
 }
 
 operator fun String.invoke(): String {
@@ -131,23 +133,16 @@ fun DependencyHandlerScope.compatCompileOnly(dependency: Dependency) {
     "compatCompileOnly"(dependency)
 }
 
-// Force LWJGL 3.3.3 for Java 21 compat
-configurations.all {
-    resolutionStrategy {
-        eachDependency {
-            when (requested.group.toString()) {
-                "org.lwjgl" -> useVersion("3.3.3")
-            }
-        }
-    }
-}
-
 dependencies {
-    minecraft("net.neoforged:forge:${"minecraft_version"()}-${"forge_version"()}")
+    minecraft("net.minecraftforge:forge:${"minecraft_version"()}-${"forge_version"()}")
 
     // Mods
     compatCompileOnly(fg.deobf("curse.maven:codechickenlib-242818:${"codechicken_fileid"()}"))
     compatCompileOnly(fg.deobf("curse.maven:immersiveengineering-231951:${"ie_fileid"()}"))
+
+    // Fabric API
+    compileOnly("net.fabricmc.fabric-api:fabric-api:${"fabric_version"()}")
+    compileOnly("net.fabricmc:fabric-loader:${"fabric_loader_version"()}")
 
     annotationProcessor("net.fabricmc:sponge-mixin:0.12.5+mixin.0.8.5")
 
