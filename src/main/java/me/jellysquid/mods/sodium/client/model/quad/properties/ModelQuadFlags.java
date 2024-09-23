@@ -22,6 +22,16 @@ public class ModelQuadFlags {
     public static final int IS_ALIGNED = 0b100;
 
     /**
+     * Indicates that the quad should be shaded using vanilla's getShade logic and the light face, rather than
+     * the normals of each vertex.
+     */
+    public static final int IS_VANILLA_SHADED = 0b1000;
+    /**
+     * Indicates that the flags are populated for the quad.
+     */
+    public static final int IS_POPULATED = (1 << 31);
+
+    /**
      * @return True if the bit-flag of {@link ModelQuadFlags} contains the given flag
      */
     public static boolean contains(int flags, int mask) {
@@ -104,6 +114,8 @@ public class ModelQuadFlags {
         if (aligned) {
             flags |= IS_ALIGNED;
         }
+
+        flags |= IS_POPULATED;
 
         return flags;
     }

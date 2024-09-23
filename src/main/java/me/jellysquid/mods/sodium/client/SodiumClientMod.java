@@ -9,8 +9,10 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkConstants;
 
+import org.embeddedt.embeddium.api.EmbeddiumConstants;
 import org.embeddedt.embeddium.render.ShaderModBridge;
 import org.embeddedt.embeddium.taint.incompats.IncompatibleModManager;
 import org.embeddedt.embeddium.taint.scanning.TaintDetector;
@@ -35,9 +37,22 @@ public class SodiumClientMod {
         MOD_VERSION = ModList.get().getModContainerById(MODID).get().getModInfo().getVersion().toString();
         ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 
+        if (!FMLLoader.getDist().isClient()) {
+            return;
+        }
+
         TaintDetector.init();
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        var eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        if("true".equals(System.getProperty("embeddium.enableGameTest"))) {
+            try {
+                eventBus.register(Class.forName("org.embeddedt.embeddium.impl.gametest.content.TestRegistry"));
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        eventBus.addListener(this::onClientSetup);
 
         try {
             updateFingerprint();

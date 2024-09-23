@@ -50,7 +50,8 @@ public class SodiumGameOptions {
         public boolean useFogOcclusion = true;
         public boolean useBlockFaceCulling = true;
         public boolean useCompactVertexFormat = true;
-        public boolean useTranslucentFaceSorting = false;
+        @SerializedName("use_translucent_face_sorting_v2")
+        public boolean useTranslucentFaceSorting = true;
         public boolean useNoErrorGLContext = true;
     }
 
@@ -67,6 +68,8 @@ public class SodiumGameOptions {
         public GraphicsQuality leavesQuality = GraphicsQuality.DEFAULT;
 
         public boolean enableVignette = true;
+
+        public boolean useQuadNormalsForShading = false;
     }
 
     public static class NotificationSettings {

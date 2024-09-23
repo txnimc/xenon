@@ -16,6 +16,11 @@ jobs:
         id: ref
       - name: Checkout sources
         uses: actions/checkout@v3
+      - uses: madhead/read-java-properties@latest
+        id: mod_props
+        with:
+          file: gradle.properties
+          all: true
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -28,13 +33,24 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/loom-cache
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-build-snapshot-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+            ~/.minecraft/assets
+          key: ${{ runner.os }}-${{ github.ref }}-build-snapshot-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-build-snapshot-
+            ${{ runner.os }}-${{ github.ref }}-build-snapshot-
       - name: Build artifacts
-        run: ./gradlew reobfJarJar
+        run: ./gradlew reobfJar
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Xenon
           path: build/libs
+      - name: Run automated tests
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: ./gradlew runGameTestCiClient
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: Embeddium-TestData
+          path: run

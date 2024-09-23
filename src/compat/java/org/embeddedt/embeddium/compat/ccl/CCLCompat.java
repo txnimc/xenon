@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.embeddedt.embeddium.api.BlockRendererRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -51,18 +52,18 @@ public class CCLCompat {
                 }
                 if(!customBlockRenderers.isEmpty()) {
                     Block block = ctx.state().getBlock();
-                    for(Map.Entry<Holder<Block>, ICCBlockRenderer> entry : customBlockRenderers.entrySet()) {
-                        if(entry.getKey().get() == block && entry.getValue().canHandleBlock(ctx.world(), ctx.pos(), ctx.state(), ctx.renderLayer())) {
-                            resultList.add(createBridge(entry.getValue()));
-                        }
+                    var holder = ForgeRegistries.BLOCKS.getDelegateOrThrow(block);
+                    var renderer = customBlockRenderers.get(holder);
+                    if (renderer != null && renderer.canHandleBlock(ctx.world(), ctx.pos(), ctx.state(), ctx.renderLayer())) {
+                        resultList.add(createBridge(renderer));
                     }
                 }
                 if(!customFluidRenderers.isEmpty()) {
                     Fluid fluid = ctx.state().getFluidState().getType();
-                    for(Map.Entry<Holder<Fluid>, ICCBlockRenderer> entry : customFluidRenderers.entrySet()) {
-                        if(entry.getKey().get().isSame(fluid) && entry.getValue().canHandleBlock(ctx.world(), ctx.pos(), ctx.state(), ctx.renderLayer())) {
-                            resultList.add(createBridge(entry.getValue()));
-                        }
+                    var holder = ForgeRegistries.FLUIDS.getDelegateOrThrow(fluid);
+                    var renderer = customFluidRenderers.get(holder);
+                    if (renderer != null && renderer.canHandleBlock(ctx.world(), ctx.pos(), ctx.state(), ctx.renderLayer())) {
+                        resultList.add(createBridge(renderer));
                     }
                 }
             });

@@ -14,6 +14,8 @@ import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
+import java.util.List;
+
 public class EntityRenderer {
 
     private static final int NUM_CUBE_VERTICES = 8;
@@ -40,6 +42,7 @@ public class EntityRenderer {
 
 
     private static final long SCRATCH_BUFFER = MemoryUtil.nmemAlignedAlloc(64, NUM_CUBE_FACES * NUM_FACE_VERTICES * ModelVertex.STRIDE);
+    private static final MemoryStack STACK = MemoryStack.create();
 
     private static final Vector3f[] CUBE_CORNERS = new Vector3f[NUM_CUBE_VERTICES];
     private static final int[][] CUBE_VERTICES = new int[][] {
@@ -80,6 +83,7 @@ public class EntityRenderer {
         }
     }
 
+    @Deprecated
     public static void render(PoseStack matrixStack, VertexBufferWriter writer, ModelPart part, int light, int overlay, int color) {
         ModelPartData accessor = ModelPartData.from(part);
         
@@ -117,6 +121,7 @@ public class EntityRenderer {
         }
     }
 
+    @Deprecated
     private static void renderCuboids(PoseStack.Pose matrices, VertexBufferWriter writer, ModelCuboid[] cuboids, int light, int overlay, int color) {
         prepareNormals(matrices);
 
@@ -125,10 +130,20 @@ public class EntityRenderer {
 
             var vertexCount = emitQuads(cuboid, color, overlay, light);
 
-            try (MemoryStack stack = MemoryStack.stackPush()) {
-                writer.push(stack, SCRATCH_BUFFER, vertexCount, ModelVertex.FORMAT);
-            }
+            STACK.push();
+            writer.push(STACK, SCRATCH_BUFFER, vertexCount, ModelVertex.FORMAT);
+            STACK.pop();
         }
+    }
+
+    public static void renderCuboidFast(PoseStack.Pose matrices, VertexBufferWriter writer, ModelCuboid cuboid, int light, int overlay, int color) {
+        prepareVertices(matrices, cuboid);
+
+        var vertexCount = emitQuads(cuboid, color, overlay, light);
+
+        STACK.push();
+        writer.push(STACK, SCRATCH_BUFFER, vertexCount, ModelVertex.FORMAT);
+        STACK.pop();
     }
 
     private static int emitQuads(ModelCuboid cuboid, int color, int overlay, int light) {
@@ -185,7 +200,7 @@ public class EntityRenderer {
         buildVertexTexCoord(VERTEX_TEXTURES[FACE_POS_X], cuboid.u0, cuboid.v1, cuboid.u1, cuboid.v2);
     }
 
-    private static void prepareNormals(PoseStack.Pose matrices) {
+    public static void prepareNormals(PoseStack.Pose matrices) {
         CUBE_NORMALS[FACE_NEG_Y] = MatrixHelper.transformNormal(matrices.normal(), Direction.DOWN);
         CUBE_NORMALS[FACE_POS_Y] = MatrixHelper.transformNormal(matrices.normal(), Direction.UP);
         CUBE_NORMALS[FACE_NEG_Z] = MatrixHelper.transformNormal(matrices.normal(), Direction.NORTH);

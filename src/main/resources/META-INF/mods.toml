@@ -3,7 +3,7 @@ loaderVersion="[47,)"
 license="LGPL-3.0-only"
 [[mods]]
 modId="xenon"
-version="${version}"
+version="${file.jarVersion}"
 displayName="Xenon"
 logoFile="icon.png"
 description='''
