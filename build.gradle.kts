@@ -74,7 +74,7 @@ neoForge {
         }
     }
     mods {
-        create("embeddium") {
+        create("xenon") {
             sourceSet(sourceSets["main"])
             extraSourceSets.forEach {
                 sourceSet(sourceSets[it])
@@ -87,7 +87,7 @@ neoForge {
 
             systemProperty("mixin.env.remapRefMap", "true")
             systemProperty("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
-            mods.add(neoForge.mods.named("embeddium"))
+            mods.add(neoForge.mods.named("xenon"))
         }
 
         create("client") {
@@ -166,13 +166,13 @@ dependencies {
     implementation("io.github.llamalad7:mixinextras-forge:0.3.5")
 }
 
-tasks.processResources {
-    inputs.property("version", "version"())
-
-    filesMatching("META-INF/mods.toml") {
-        expand("file" to mapOf("jarVersion" to inputs.properties["version"]))
-    }
-}
+//tasks.processResources {
+//    inputs.property("version", version)
+//
+//    filesMatching("META-INF/mods.toml") {
+//        expand("file" to mapOf("jarVersion" to inputs.properties["version"]))
+//    }
+//}
 
 tasks.withType<JavaCompile> {
     options.release = 17

@@ -63,7 +63,7 @@ public class WindowMixin {
 
         // If the user has opted to delegate creation of the early window to us (needed for the above calls to have an
         // effect) create it now.
-        if (FMLConfig.getBoolConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_CONTROL) && Objects.equals(FMLConfig.getConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_PROVIDER), "embeddium")) {
+        if (FMLConfig.getBoolConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_CONTROL) && Objects.equals(FMLConfig.getConfigValue(FMLConfig.ConfigValue.EARLY_WINDOW_PROVIDER), "xenon")) {
             EmbeddiumEarlyWindowHacks.createEarlyLaunchWindow(width, height);
         }
 

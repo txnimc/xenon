@@ -129,7 +129,7 @@ public class OptionPageFrame extends AbstractFrame {
             return null;
         } else {
             return switch(mod) {
-                case "minecraft" -> "embeddium";
+                case "minecraft" -> "xenon";
                 default -> mod;
             };
         }

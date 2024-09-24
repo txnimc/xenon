@@ -45,13 +45,13 @@ public class SodiumClientMod {
 
         var eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        if("true".equals(System.getProperty("embeddium.enableGameTest"))) {
-            try {
-                eventBus.register(Class.forName("org.embeddedt.embeddium.impl.gametest.content.TestRegistry"));
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
+//        if("true".equals(System.getProperty("embeddium.enableGameTest"))) {
+//            try {
+//                eventBus.register(Class.forName("org.embeddedt.embeddium.impl.gametest.content.TestRegistry"));
+//            } catch (ClassNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
         eventBus.addListener(this::onClientSetup);
 
         try {

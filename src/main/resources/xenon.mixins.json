@@ -1,16 +1,16 @@
 {
-  "package" : "me.jellysquid.mods.sodium.mixin",
+  "package": "me.jellysquid.mods.sodium.mixin",
   "refmap": "xenon-refmap.json",
-  "required" : true,
+  "required": true,
   "minVersion": "0.8",
-  "compatibilityLevel" : "JAVA_17",
-  "plugin" : "me.jellysquid.mods.sodium.mixin.SodiumMixinPlugin",
-  "injectors" : {
-    "defaultRequire" : 1
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "me.jellysquid.mods.sodium.mixin.SodiumMixinPlugin",
+  "injectors": {
+    "defaultRequire": 1
   },
-  "overwrites" : {
-    "conformVisibility" : true
+  "overwrites": {
+    "conformVisibility": true
   },
-  "client" : [
+  "client": [
   ]
 }

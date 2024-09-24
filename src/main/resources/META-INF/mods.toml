@@ -1,9 +1,10 @@
 modLoader="javafml"
 loaderVersion="[47,)"
 license="LGPL-3.0-only"
+
 [[mods]]
 modId="xenon"
-version="${file.jarVersion}"
+version="0.3.31"
 displayName="Xenon"
 logoFile="icon.png"
 description='''
@@ -11,19 +12,26 @@ Xenon is a fork of Embeddium, which is a fork of Rubidium, which is a Forge port
 '''
 credits="toni, embeddedt, NanoLive, CaffeineMC"
 authors="toni, embeddedt"
+clientSideOnly=true
+side = "CLIENT"
 
 [[mods]]
 modId = "rubidium"
 version = "0.7.1"
 displayName = "Rubidium (Xenon)"
+clientSideOnly=true
+side = "CLIENT"
 description = '''
 Stub, to allow mods detecting Rubidium to function as expected.
 '''
 
+
 [[mods]]
 modId = "embeddium"
-version = "${version}"
+version = "0.3.31"
 displayName = "Embeddium (Xenon)"
+clientSideOnly=true
+side = "CLIENT"
 description = '''
 Stub, to allow mods detecting Embeddium to function as expected.
 '''
@@ -37,7 +45,7 @@ ordering = "BEFORE"
 side = "CLIENT"
 
 # The new config screen supersedes TexTrue's Embeddium Options
-[[dependencies.embeddium]]
+[[dependencies.xenon]]
 modId = "textrues_embeddium_options"
 mandatory = false
 versionRange = "[0.0.0-NOT-COMPATIBLE]"
